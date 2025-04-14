@@ -26,4 +26,5 @@ public class Activator implements BundleActivator {
 		Activator.context = null;
 	}
 
+
 }
