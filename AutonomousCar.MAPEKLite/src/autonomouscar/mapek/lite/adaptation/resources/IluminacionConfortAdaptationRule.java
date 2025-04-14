@@ -22,6 +22,7 @@ public class IluminacionConfortAdaptationRule extends AdaptationRule {
 	IKnowledgeProperty kp_EnCasa = null;
 
 	
+	
 	public IluminacionConfortAdaptationRule(BundleContext context) {
 		super(context, ID);
 		this.setListenToKnowledgePropertyChanges("FranjaDia");
