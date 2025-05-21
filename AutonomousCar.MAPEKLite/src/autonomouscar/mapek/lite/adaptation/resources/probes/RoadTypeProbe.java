@@ -15,7 +15,7 @@ public class RoadTypeProbe extends Probe implements ServiceListener {
 
 	public RoadTypeProbe(BundleContext context) {
 		super(context, id);
-		this.logger.info(id + " ON");
+		this.logger.info(id + " Starting");
 		try {
 			IRoadSensor roadSensor = OSGiUtils.getService(context, IRoadSensor.class);
 			context.addServiceListener(this, "(objectclass="+ IRoadSensor.class.getName()+")");

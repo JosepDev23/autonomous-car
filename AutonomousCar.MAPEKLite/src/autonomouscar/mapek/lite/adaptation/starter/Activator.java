@@ -6,6 +6,8 @@ import org.osgi.framework.BundleContext;
 import autonomouscar.mapek.lite.adaptation.resources.IluminacionConfortAdaptationRule;
 import autonomouscar.mapek.lite.adaptation.resources.MonitorModo;
 import autonomouscar.mapek.lite.adaptation.resources.SondaModo;
+import autonomouscar.mapek.lite.adaptation.resources.monitors.RoadTypeMonitor;
+import autonomouscar.mapek.lite.adaptation.resources.probes.RoadTypeProbe;
 import es.upv.pros.tatami.adaptation.mapek.lite.ARC.artifacts.interfaces.IAdaptiveReadyComponent;
 import es.upv.pros.tatami.adaptation.mapek.lite.ARC.structures.systemconfiguration.interfaces.IComponentsSystemConfiguration;
 import es.upv.pros.tatami.adaptation.mapek.lite.ARC.structures.systemconfiguration.interfaces.IRuleComponentsSystemConfiguration;
@@ -17,6 +19,8 @@ import sua.autonomouscar.infraestructure.devices.ARC.EngineARC;
 import sua.autonomouscar.infraestructure.devices.ARC.SteeringARC;
 import sua.autonomouscar.infraestructure.driving.ARC.FallbackPlanARC;
 import sua.autonomouscar.infraestructure.driving.ARC.L3_DrivingServiceARC;
+import sua.autonomouscar.interfaces.ERoadStatus;
+import sua.autonomouscar.interfaces.ERoadType;
 
 public class Activator implements BundleActivator {
 
@@ -52,17 +56,22 @@ public class Activator implements BundleActivator {
 		
 		// ADAPTATION PROPERTIES
 		IKnowledgeProperty kp_Modo = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("Modo");
+		IKnowledgeProperty kp_RoadType = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("RoadType");
+		IKnowledgeProperty kp_RoadStatus = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("RoadStatus");
 
 		// ADAPTATION RULES
  		IAdaptiveReadyComponent theIluminacionConfortAdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new IluminacionConfortAdaptationRule(bundleContext));		
  		
 		// MONITORS
-		IAdaptiveReadyComponent theModoMonitorARC = BasicMAPEKLiteLoopHelper.deployMonitor(new MonitorModo(bundleContext));		
+		IAdaptiveReadyComponent theModoMonitorARC = BasicMAPEKLiteLoopHelper.deployMonitor(new MonitorModo(bundleContext));
+		IAdaptiveReadyComponent roadTypeMonitorARC = BasicMAPEKLiteLoopHelper.deployMonitor(new RoadTypeMonitor(bundleContext));
 
 		// PROBES
 		IAdaptiveReadyComponent theModoProbeARC = BasicMAPEKLiteLoopHelper.deployProbe(new SondaModo(bundleContext), theModoMonitorARC);
-
-		//
+		IAdaptiveReadyComponent roadTypeProbeARC = BasicMAPEKLiteLoopHelper.deployProbe(new RoadTypeProbe(bundleContext), roadTypeMonitorARC);
+		
+		kp_RoadStatus.setValue(ERoadStatus.FLUID);
+		kp_RoadType.setValue(ERoadType.STD_ROAD);
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {
