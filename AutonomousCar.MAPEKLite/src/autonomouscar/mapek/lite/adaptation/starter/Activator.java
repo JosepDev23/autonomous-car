@@ -19,6 +19,7 @@ import sua.autonomouscar.infraestructure.devices.ARC.EngineARC;
 import sua.autonomouscar.infraestructure.devices.ARC.SteeringARC;
 import sua.autonomouscar.infraestructure.driving.ARC.FallbackPlanARC;
 import sua.autonomouscar.infraestructure.driving.ARC.L3_DrivingServiceARC;
+import sua.autonomouscar.interfaces.EDrivingLevel;
 import sua.autonomouscar.interfaces.ERoadStatus;
 import sua.autonomouscar.interfaces.ERoadType;
 
@@ -56,6 +57,7 @@ public class Activator implements BundleActivator {
 		
 		// ADAPTATION PROPERTIES
 		IKnowledgeProperty kp_Modo = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("Modo");
+		IKnowledgeProperty kp_DrivingLevel = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("DrivingLevel");
 		IKnowledgeProperty kp_RoadType = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("RoadType");
 		IKnowledgeProperty kp_RoadStatus = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("RoadStatus");
 
@@ -70,6 +72,8 @@ public class Activator implements BundleActivator {
 		IAdaptiveReadyComponent theModoProbeARC = BasicMAPEKLiteLoopHelper.deployProbe(new SondaModo(bundleContext), theModoMonitorARC);
 		IAdaptiveReadyComponent roadTypeProbeARC = BasicMAPEKLiteLoopHelper.deployProbe(new RoadTypeProbe(bundleContext), roadTypeMonitorARC);
 		
+
+		kp_DrivingLevel.setValue(EDrivingLevel.L0_ManualDriving);
 		kp_RoadStatus.setValue(ERoadStatus.FLUID);
 		kp_RoadType.setValue(ERoadType.STD_ROAD);
 	}
