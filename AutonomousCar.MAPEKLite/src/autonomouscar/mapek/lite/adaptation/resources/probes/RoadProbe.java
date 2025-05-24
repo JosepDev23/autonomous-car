@@ -9,11 +9,11 @@ import sua.autonomouscar.devices.interfaces.IRoadSensor;
 import es.upv.pros.tatami.adaptation.mapek.lite.artifacts.components.Probe;
 import es.upv.pros.tatami.osgi.utils.components.OSGiUtils;
 
-public class RoadTypeProbe extends Probe implements ServiceListener {
+public class RoadProbe extends Probe implements ServiceListener {
 	
 	public static String id = "RoadTypeProbe";
 
-	public RoadTypeProbe(BundleContext context) {
+	public RoadProbe(BundleContext context) {
 		super(context, id);
 		this.logger.info(id + " Starting");
 		try {

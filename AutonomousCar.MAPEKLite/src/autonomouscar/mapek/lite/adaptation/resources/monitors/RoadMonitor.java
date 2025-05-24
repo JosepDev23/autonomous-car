@@ -9,10 +9,10 @@ import es.upv.pros.tatami.adaptation.mapek.lite.helpers.BasicMAPEKLiteLoopHelper
 import sua.autonomouscar.interfaces.ERoadStatus;
 import sua.autonomouscar.interfaces.ERoadType;
 
-public class RoadTypeMonitor extends Monitor {
-	public static String id = "RoadTypeMonitor";
+public class RoadMonitor extends Monitor {
+	public static String id = "RoadMonitor";
 	
-	public RoadTypeMonitor(BundleContext context) {
+	public RoadMonitor(BundleContext context) {
 		super(context, id);
 		this.logger.info(id + " Starting");
 	}
