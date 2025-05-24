@@ -18,7 +18,7 @@ public class Activator implements BundleActivator {
 		Activator.context = bundleContext;
 		this.roadSensorARC = new RoadSensorARC(bundleContext, "RoadSensor");
 		this.roadSensorARC.start();
-		
+				
 		// Activamos este servicio por defecto (para facilitar la simulación)
 		this.roadSensorARC.deploy();
 	}
