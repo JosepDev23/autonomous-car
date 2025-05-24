@@ -11,7 +11,7 @@ import es.upv.pros.tatami.osgi.utils.components.OSGiUtils;
 
 public class RoadProbe extends Probe implements ServiceListener {
 	
-	public static String id = "RoadTypeProbe";
+	public static String id = "RoadProbe";
 
 	public RoadProbe(BundleContext context) {
 		super(context, id);

@@ -6,6 +6,9 @@ import org.osgi.framework.BundleContext;
 import autonomouscar.mapek.lite.adaptation.resources.monitors.RoadMonitor;
 import autonomouscar.mapek.lite.adaptation.resources.probes.RoadProbe;
 import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_2_AdaptationRule;
+import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_3_AdaptationRule;
+import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_4_AdaptationRule;
+import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_5_AdaptationRule;
 import es.upv.pros.tatami.adaptation.mapek.lite.ARC.artifacts.interfaces.IAdaptiveReadyComponent;
 import es.upv.pros.tatami.adaptation.mapek.lite.ARC.structures.systemconfiguration.interfaces.IComponentsSystemConfiguration;
 import es.upv.pros.tatami.adaptation.mapek.lite.ARC.structures.systemconfiguration.interfaces.IRuleComponentsSystemConfiguration;
@@ -60,7 +63,10 @@ public class Activator implements BundleActivator {
 
 		// ADAPTATION RULES
  		IAdaptiveReadyComponent ads_L3_2_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_L3_2_AdaptationRule(bundleContext));
- 		
+ 		IAdaptiveReadyComponent ads_L3_3_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_L3_3_AdaptationRule(bundleContext));
+ 		IAdaptiveReadyComponent ads_L3_4_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_L3_4_AdaptationRule(bundleContext));
+ 		IAdaptiveReadyComponent ads_L3_5_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_L3_5_AdaptationRule(bundleContext));
+
 		// MONITORS
 		IAdaptiveReadyComponent roadMonitorARC = BasicMAPEKLiteLoopHelper.deployMonitor(new RoadMonitor(bundleContext));
 
@@ -68,8 +74,8 @@ public class Activator implements BundleActivator {
 		IAdaptiveReadyComponent roadProbeARC = BasicMAPEKLiteLoopHelper.deployProbe(new RoadProbe(bundleContext), roadMonitorARC);
 		
 
-		kp_DrivingLevel.setValue(EDrivingLevel.L3_HighwayChauffer);
-		kp_RoadStatus.setValue(ERoadStatus.FLUID);
+		kp_DrivingLevel.setValue(EDrivingLevel.L3_TrafficJamChauffer);
+		kp_RoadStatus.setValue(ERoadStatus.COLLAPSED);
 		kp_RoadType.setValue(ERoadType.HIGHWAY);
 	}
 
