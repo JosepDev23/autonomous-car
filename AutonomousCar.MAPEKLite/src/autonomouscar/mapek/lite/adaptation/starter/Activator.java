@@ -6,11 +6,14 @@ import org.osgi.framework.BundleContext;
 import autonomouscar.mapek.lite.adaptation.resources.monitors.DriverFaceMonitor;
 import autonomouscar.mapek.lite.adaptation.resources.monitors.DriverHandsMonitor;
 import autonomouscar.mapek.lite.adaptation.resources.monitors.DriverSeatedMonitor;
+import autonomouscar.mapek.lite.adaptation.resources.monitors.EngineHealthMonitor;
 import autonomouscar.mapek.lite.adaptation.resources.monitors.RoadMonitor;
 import autonomouscar.mapek.lite.adaptation.resources.probes.DriverFaceProbe;
 import autonomouscar.mapek.lite.adaptation.resources.probes.DriverHandsProbe;
 import autonomouscar.mapek.lite.adaptation.resources.probes.DriverSeatedProbe;
+import autonomouscar.mapek.lite.adaptation.resources.probes.EngineHealthProbe;
 import autonomouscar.mapek.lite.adaptation.resources.probes.RoadProbe;
+import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_2_AdaptationRule;
 import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_2_AdaptationRule;
 import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_3_AdaptationRule;
 import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_4_AdaptationRule;
@@ -64,6 +67,7 @@ public class Activator implements BundleActivator {
 		IKnowledgeProperty kp_DrivingLevel = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("DrivingLevel");
 		IKnowledgeProperty kp_RoadType = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("RoadType");
 		IKnowledgeProperty kp_RoadStatus = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("RoadStatus");
+		IKnowledgeProperty kp_EngineHealth = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("EngineHealth");
 		IKnowledgeProperty kp_DriverFace = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("DriverFace");
 		IKnowledgeProperty kp_DriverHands = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("DriverHands");
 		IKnowledgeProperty kp_DriverSeated = BasicMAPEKLiteLoopHelper.createKnowledgeProperty("DriverSeated");
@@ -71,6 +75,7 @@ public class Activator implements BundleActivator {
 		kp_DrivingLevel.setValue(EDrivingLevel.L3_TrafficJamChauffer);
 		kp_RoadStatus.setValue(ERoadStatus.COLLAPSED);
 		kp_RoadType.setValue(ERoadType.HIGHWAY);
+		kp_EngineHealth.setValue(true);
 		kp_DriverFace.setValue(EFaceStatus.LOOKING_FORWARD);
 		kp_DriverHands.setValue(true);
 		kp_DriverSeated.setValue(true);
@@ -80,15 +85,18 @@ public class Activator implements BundleActivator {
  		IAdaptiveReadyComponent ads_L3_3_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_L3_3_AdaptationRule(bundleContext));
  		IAdaptiveReadyComponent ads_L3_4_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_L3_4_AdaptationRule(bundleContext));
  		IAdaptiveReadyComponent ads_L3_5_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_L3_5_AdaptationRule(bundleContext));
+ 		IAdaptiveReadyComponent ads_2_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_2_AdaptationRule(bundleContext));
 
 		// MONITORS
 		IAdaptiveReadyComponent roadMonitorARC = BasicMAPEKLiteLoopHelper.deployMonitor(new RoadMonitor(bundleContext));
+		IAdaptiveReadyComponent engineHealthMonitorARC = BasicMAPEKLiteLoopHelper.deployMonitor(new EngineHealthMonitor(bundleContext));
 		IAdaptiveReadyComponent driverFaceMonitorARC = BasicMAPEKLiteLoopHelper.deployMonitor(new DriverFaceMonitor(bundleContext));
 		IAdaptiveReadyComponent driverHandsMonitorARC = BasicMAPEKLiteLoopHelper.deployMonitor(new DriverHandsMonitor(bundleContext));
 		IAdaptiveReadyComponent driverSeatedMonitorARC = BasicMAPEKLiteLoopHelper.deployMonitor(new DriverSeatedMonitor(bundleContext));
 
 		// PROBES
 		IAdaptiveReadyComponent roadProbeARC = BasicMAPEKLiteLoopHelper.deployProbe(new RoadProbe(bundleContext), roadMonitorARC);
+		IAdaptiveReadyComponent engineHealthProbeARC = BasicMAPEKLiteLoopHelper.deployProbe(new EngineHealthProbe(bundleContext), engineHealthMonitorARC);
 		IAdaptiveReadyComponent driverFaceProbeARC = BasicMAPEKLiteLoopHelper.deployProbe(new DriverFaceProbe(bundleContext), driverFaceMonitorARC);
 		IAdaptiveReadyComponent driverHandsProbeARC = BasicMAPEKLiteLoopHelper.deployProbe(new DriverHandsProbe(bundleContext), driverHandsMonitorARC);
 		IAdaptiveReadyComponent driverSeatedProbeARC = BasicMAPEKLiteLoopHelper.deployProbe(new DriverSeatedProbe(bundleContext), driverSeatedMonitorARC);
