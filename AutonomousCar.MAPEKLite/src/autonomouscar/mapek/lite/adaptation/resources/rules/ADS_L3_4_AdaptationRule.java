@@ -10,6 +10,7 @@ import es.upv.pros.tatami.adaptation.mapek.lite.helpers.BasicMAPEKLiteLoopHelper
 import es.upv.pros.tatami.adaptation.mapek.lite.helpers.SystemConfigurationHelper;
 import es.upv.pros.tatami.adaptation.mapek.lite.structures.systemconfiguration.interfaces.IRuleSystemConfiguration;
 import es.upv.pros.tatami.osgi.utils.interfaces.ITimeStamped;
+import sua.autonomouscar.devices.interfaces.IDistanceSensor;
 import sua.autonomouscar.infraestructure.devices.ARC.DistanceSensorARC;
 import sua.autonomouscar.infraestructure.devices.ARC.DriverFaceMonitorARC;
 import sua.autonomouscar.infraestructure.devices.ARC.EngineARC;
@@ -18,6 +19,7 @@ import sua.autonomouscar.infraestructure.devices.ARC.HumanSensorsARC;
 import sua.autonomouscar.infraestructure.devices.ARC.LineSensorARC;
 import sua.autonomouscar.infraestructure.devices.ARC.RoadSensorARC;
 import sua.autonomouscar.infraestructure.devices.ARC.SeatSensorARC;
+import sua.autonomouscar.infraestructure.devices.ARC.SpeedometerARC;
 import sua.autonomouscar.infraestructure.devices.ARC.SteeringARC;
 import sua.autonomouscar.infraestructure.driving.ARC.FallbackPlanARC;
 import sua.autonomouscar.infraestructure.driving.ARC.L3_DrivingServiceARC;
@@ -60,6 +62,10 @@ public class ADS_L3_4_AdaptationRule extends AdaptationRule {
 		
 		kp_DrivingLevel.setValue(EDrivingLevel.L3_HighwayChauffer);
 		
+		SystemConfigurationHelper.componentToRemove(ruleComponentsSystemConfiguration, "driving.L3.TrafficJamChauffer", "1.0.0");
+		
+		SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "driving.L3.HighwayChauffer", "1.0.0");
+
 		SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.RoadSensor", "1.0.0");
 		SystemConfigurationHelper.bindingToAdd(
 				ruleComponentsSystemConfiguration, 
@@ -89,7 +95,17 @@ public class ADS_L3_4_AdaptationRule extends AdaptationRule {
 				"device.Engine", 
 				"1.0.0", 
 				EngineARC.PROVIDED_DEVICE);
-		
+		/*
+		SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.Speedometer", "1.0.0");
+		SystemConfigurationHelper.bindingToAdd(
+				ruleComponentsSystemConfiguration, 
+				"driving.L3.HighwayChauffer", 
+				"1.0.0", 
+				L3_DrivingServiceARC.REQUIRED_ENGINE, 
+				"device.Speedometer", 
+				"1.0.0", 
+				SpeedometerARC.PROVIDED_SENSOR);
+		*/
 		SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "driving.FallbackPlan.ParkInTheRoadShoulder", "1.0.0");
 		SystemConfigurationHelper.bindingToAdd(
 				ruleComponentsSystemConfiguration, 
@@ -166,75 +182,34 @@ public class ADS_L3_4_AdaptationRule extends AdaptationRule {
 	
 	private void bindDistanceSensors(IRuleComponentsSystemConfiguration ruleComponentsSystemConfiguration,
 			String drivingservice) {
-		ServiceReference<?> ref_FrontDistanceSensorARC = context.getServiceReference(DistanceSensorARC.class.getName() +".FrontDistanceSensor");
-		if (ref_FrontDistanceSensorARC != null) {
-			SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.FrontDistanceSensor", "1.0.0");
-			SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
-					L3_DrivingServiceARC.REQUIRED_FRONTDISTANCESENSOR, "device.FrontDistanceSensor", "1.0.0",
-					DistanceSensorARC.PROVIDED_SENSOR);
-		} else {
-			SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.LIDAR.FrontDistanceSensor",
-					"1.0.0");
-			SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
-					L3_DrivingServiceARC.REQUIRED_FRONTDISTANCESENSOR, "device.LIDAR.FrontDistanceSensor", "1.0.0",
-					DistanceSensorARC.PROVIDED_SENSOR);
-		}
-		ServiceReference<?> ref_RearDistanceSensorARC = context.getServiceReference(DistanceSensorARC.class.getName() +".RearDistanceSensor");
-		if (ref_RearDistanceSensorARC != null) {
-			SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.RearDistanceSensor", "1.0.0");
-			SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
-					L3_DrivingServiceARC.REQUIRED_REARDISTANCESENSOR, "device.RearDistanceSensor", "1.0.0",
-					DistanceSensorARC.PROVIDED_SENSOR);
-		} else {
-			SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.LIDAR.RearDistanceSensor",
-					"1.0.0");
-			SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
-					L3_DrivingServiceARC.REQUIRED_REARDISTANCESENSOR, "device.LIDAR.RearDistanceSensor", "1.0.0",
-					DistanceSensorARC.PROVIDED_SENSOR);
-		}
-		ServiceReference<?> ref_LeftDistanceSensorARC = context.getServiceReference(DistanceSensorARC.class.getName() +".LeftDistanceSensor");
-		if (ref_LeftDistanceSensorARC != null) {
-			SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.LeftDistanceSensor", "1.0.0");
-			SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
-					L3_DrivingServiceARC.REQUIRED_LEFTDISTANCESENSOR, "device.LeftDistanceSensor", "1.0.0",
-					DistanceSensorARC.PROVIDED_SENSOR);
-		} else {
-			SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.LIDAR.LeftDistanceSensor",
-					"1.0.0");
-			SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
-					L3_DrivingServiceARC.REQUIRED_LEFTDISTANCESENSOR, "device.LIDAR.LeftDistanceSensor", "1.0.0",
-					DistanceSensorARC.PROVIDED_SENSOR);
-		}
-		ServiceReference<?> ref_RightDistanceSensorARC = context.getServiceReference(DistanceSensorARC.class.getName() +".RightDistanceSensor");
-		if (ref_RightDistanceSensorARC != null) {
-			SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.RightDistanceSensor", "1.0.0");
-			SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
-					L3_DrivingServiceARC.REQUIRED_RIGHTDISTANCESENSOR, "device.RightDistanceSensor", "1.0.0",
-					DistanceSensorARC.PROVIDED_SENSOR);
-		} else {
-			SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.LIDAR.RightDistanceSensor",
-					"1.0.0");
-			SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
-					L3_DrivingServiceARC.REQUIRED_RIGHTDISTANCESENSOR, "device.LIDAR.RightDistanceSensor", "1.0.0",
-					DistanceSensorARC.PROVIDED_SENSOR);
-		}
+		SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.FrontDistanceSensor", "1.0.0");
+		SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
+				L3_DrivingServiceARC.REQUIRED_FRONTDISTANCESENSOR, "device.FrontDistanceSensor", "1.0.0",
+				DistanceSensorARC.PROVIDED_SENSOR);
+		SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.RearDistanceSensor", "1.0.0");
+		SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
+				L3_DrivingServiceARC.REQUIRED_REARDISTANCESENSOR, "device.RearDistanceSensor", "1.0.0",
+				DistanceSensorARC.PROVIDED_SENSOR);
+		SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.LeftDistanceSensor", "1.0.0");
+		SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
+				L3_DrivingServiceARC.REQUIRED_LEFTDISTANCESENSOR, "device.LeftDistanceSensor", "1.0.0",
+				DistanceSensorARC.PROVIDED_SENSOR);
+		SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.RightDistanceSensor", "1.0.0");
+		SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
+				L3_DrivingServiceARC.REQUIRED_RIGHTDISTANCESENSOR, "device.RightDistanceSensor", "1.0.0",
+				DistanceSensorARC.PROVIDED_SENSOR);
+			
 	}
 	
 	private void bindLineSensors(IRuleComponentsSystemConfiguration ruleComponentsSystemConfiguration,
 			String drivingservice) {		
-		ServiceReference<?> ref_LeftLineSensor = context.getServiceReference(DistanceSensorARC.class.getName() +".LeftLineSensor");
-		if (ref_LeftLineSensor != null) {
-			SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.LeftLineSensor", "1.0.0");
-			SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
-					L3_DrivingServiceARC.REQUIRED_LEFTLINESENSOR, "device.LeftLineSensor", "1.0.0",
-					LineSensorARC.PROVIDED_SENSOR);
-		}
-		ServiceReference<?> ref_RightLineSensor = context.getServiceReference(DistanceSensorARC.class.getName() +".RightLineSensor");
-		if (ref_RightLineSensor != null) {
-			SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.RightLineSensor", "1.0.0");
-			SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
-					L3_DrivingServiceARC.REQUIRED_RIGHTLINESENSOR, "device.RightLineSensor", "1.0.0",
-					LineSensorARC.PROVIDED_SENSOR);
-		}
+		SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.LeftLineSensor", "1.0.0");
+		SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
+				L3_DrivingServiceARC.REQUIRED_LEFTLINESENSOR, "device.LeftLineSensor", "1.0.0",
+				LineSensorARC.PROVIDED_SENSOR);
+		SystemConfigurationHelper.componentToAdd(ruleComponentsSystemConfiguration, "device.RightLineSensor", "1.0.0");
+		SystemConfigurationHelper.bindingToAdd(ruleComponentsSystemConfiguration, drivingservice, "1.0.0",
+				L3_DrivingServiceARC.REQUIRED_RIGHTLINESENSOR, "device.RightLineSensor", "1.0.0",
+				LineSensorARC.PROVIDED_SENSOR);
 	}
 }
