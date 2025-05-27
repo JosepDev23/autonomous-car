@@ -18,6 +18,9 @@ import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_2_AdaptationRu
 import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_3_AdaptationRule;
 import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_4_AdaptationRule;
 import autonomouscar.mapek.lite.adaptation.resources.rules.ADS_L3_5_AdaptationRule;
+import autonomouscar.mapek.lite.adaptation.resources.rules.Interact_1_1_AdaptationRule;
+import autonomouscar.mapek.lite.adaptation.resources.rules.Interact_1_2_AdaptationRule;
+import autonomouscar.mapek.lite.adaptation.resources.rules.Interact_1_3_AdaptationRule;
 import es.upv.pros.tatami.adaptation.mapek.lite.ARC.artifacts.interfaces.IAdaptiveReadyComponent;
 import es.upv.pros.tatami.adaptation.mapek.lite.ARC.structures.systemconfiguration.interfaces.IComponentsSystemConfiguration;
 import es.upv.pros.tatami.adaptation.mapek.lite.ARC.structures.systemconfiguration.interfaces.IRuleComponentsSystemConfiguration;
@@ -86,6 +89,9 @@ public class Activator implements BundleActivator {
  		IAdaptiveReadyComponent ads_L3_4_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_L3_4_AdaptationRule(bundleContext));
  		IAdaptiveReadyComponent ads_L3_5_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_L3_5_AdaptationRule(bundleContext));
  		IAdaptiveReadyComponent ads_2_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new ADS_2_AdaptationRule(bundleContext));
+ 		IAdaptiveReadyComponent interact_1_1_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new Interact_1_1_AdaptationRule(bundleContext));
+ 		IAdaptiveReadyComponent interact_1_2_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new Interact_1_2_AdaptationRule(bundleContext));
+ 		IAdaptiveReadyComponent interact_1_3_AdaptationRuleARC = BasicMAPEKLiteLoopHelper.deployAdaptationRule(new Interact_1_3_AdaptationRule(bundleContext));
 
 		// MONITORS
 		IAdaptiveReadyComponent roadMonitorARC = BasicMAPEKLiteLoopHelper.deployMonitor(new RoadMonitor(bundleContext));

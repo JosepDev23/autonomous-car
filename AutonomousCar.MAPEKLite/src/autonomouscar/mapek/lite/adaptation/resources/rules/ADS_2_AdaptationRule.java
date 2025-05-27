@@ -11,7 +11,7 @@ import es.upv.pros.tatami.adaptation.mapek.lite.structures.systemconfiguration.i
 import es.upv.pros.tatami.osgi.utils.interfaces.ITimeStamped;
 import sua.autonomouscar.interfaces.EDrivingLevel;
 
-public class ADS_2_AdaptationRule extends AdaptationRule{
+public class ADS_2_AdaptationRule extends AdaptationRule {
 	public static String id = "ADS_2_AdaptationRule";
 	
 	IKnowledgeProperty kp_EngineHealth = null;
@@ -25,8 +25,6 @@ public class ADS_2_AdaptationRule extends AdaptationRule{
 		kp_EngineHealth = BasicMAPEKLiteLoopHelper.getKnowledgeProperty("EngineHealth");
 		kp_DrivingLevel = BasicMAPEKLiteLoopHelper.getKnowledgeProperty("DrivingLevel");		
 	}
-	
-
 	
 	@Override
 	public boolean checkAffectedByChange(IKnowledgeProperty arg0) {
