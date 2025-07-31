@@ -1,5 +1,7 @@
 # SUA AUTONOMOUS CAR
 
+Proyecto del Máster Universitario en Ingeniería y Tecnología de Sistemas Software. Nota de la implementación: **9.75**
+
 ### Josep Ramon Ribera, Javier Ruano Guallart, Samuel Cantó Ortuño, Belén Grande López
 
 ## Requisitos de adaptación implementados
